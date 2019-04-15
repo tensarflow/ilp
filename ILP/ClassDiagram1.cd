@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ILP.CurrentMonitor">
+    <Position X="12.75" Y="11.25" Width="3.25" />
+    <NestedTypes>
+      <Delegate Name="ILP.CurrentMonitor.StringArgReturningVoidDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CurrentMonitor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>Q0RAowAACjAABAQAogAIERGAUAsAlEIAAAIHAJCAggI=</HashCode>
+      <FileName>CurrentMonitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.DataProcessor">
+    <Position X="10.75" Y="16.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.DetectedSampleMovementEvent">
+    <Position X="16.25" Y="14.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAIGACAAAAABAAABAgIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DetectedSampleMovementEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.Logger">
+    <Position X="10.75" Y="13.25" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="ILP.Logger.SetTextCallback" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Logger.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAgAAAAAAIAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Logger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.Program">
+    <Position X="6.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.Robot">
+    <Position X="10.75" Y="11.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Robot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.RobotCurrentEvent">
+    <Position X="16.25" Y="11.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAECAAAAAAAAAAAAgAAAAAAEAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>RobotCurrentEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.SubsequenceDTW">
+    <Position X="8" Y="11.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAgAAAEAAAAAAAAAAAAAAgiAEgoAggAAAAAA=</HashCode>
+      <FileName>SubsequenceDTW.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mat" Collapsed="true">
+    <Position X="10.75" Y="18.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ASIEMACICDIAAwIG6AVRgIMAEACAMQAIABIASAwGIEA=</HashCode>
+      <FileName>RoboDK.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RoboDK" Collapsed="true">
+    <Position X="10.75" Y="18" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>8U+4t7+yfKcdzs80rTxfksR0NEzjmxMSyZpnbeHxbIo=</HashCode>
+      <FileName>RoboDK.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILP.GUIForm">
+    <Position X="6.25" Y="12.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>/wAAAACAACAAABAAAACEAAACAIAwAAAAEDAFAQBAADA=</HashCode>
+      <FileName>GUIForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ILP.Subsequence">
+    <Position X="8" Y="16.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAEAABABAEAQgABAAIAA=</HashCode>
+      <FileName>SubsequenceDTW.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ILP.SubsequenceStatus">
+    <Position X="8" Y="15.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABACAAAAAAgAAAA=</HashCode>
+      <FileName>SubsequenceDTW.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3DD82F2B-77DB-4143-BF54-B99F469E211D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ILP</RootNamespace>
+    <AssemblyName>ILP</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\ILP.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncIO, Version=0.1.25.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
+      <HintPath>..\packages\AsyncIO.0.1.26.0\lib\net40\AsyncIO.dll</HintPath>
+    </Reference>
+    <Reference Include="kayChart, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\kayChart.dll.0.4.7\lib\net45\kayChart.dll</HintPath>
+    </Reference>
+    <Reference Include="NetMQ, Version=4.0.0.1, Culture=neutral, PublicKeyToken=a6decef4ddc58b3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetMQ.4.0.0.1\lib\net40\NetMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActualCurrent.cs" />
+    <Compile Include="CurrentMonitor.cs" />
+    <Compile Include="DataProcessor.cs" />
+    <Compile Include="DetectedEvent.cs" />
+    <Compile Include="DetectedSampleMovementEvent.cs" />
+    <Compile Include="GUIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUIForm.Designer.cs">
+      <DependentUpon>GUIForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logger.cs" />
+    <Compile Include="PrinterCurrentEvent.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoboDK.cs" />
+    <Compile Include="Robot.cs" />
+    <Compile Include="RobotCurrentEvent.cs" />
+    <Compile Include="SubsequenceDTW.cs" />
+    <Compile Include="SynchronousSocketListener.cs" />
+    <Compile Include="TrainCurrentEvent.cs" />
+    <Compile Include="TrainDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrainDataForm.Designer.cs">
+      <DependentUpon>TrainDataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrainMonitor.cs" />
+    <Compile Include="UDPSocket.cs" />
+    <EmbeddedResource Include="GUIForm.resx">
+      <DependentUpon>GUIForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="TrainDataForm.resx">
+      <DependentUpon>TrainDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Scripts\jquery-2.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo1.png" />
+    <None Include="Resources\logo.png" />
+    <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\nugetexample.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper.Avro\NEsper.Avro.csproj">
+      <Project>{ff1f81c2-1e8f-44da-a659-710c4a65a234}</Project>
+      <Name>NEsper.Avro</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper.IO\NEsper.IO.Tests\NEsper.IO.Tests.csproj">
+      <Project>{0b841b70-5026-4cf0-837f-2a356fae5681}</Project>
+      <Name>NEsper.IO.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper.IO\NEsper.IO\NEsper.IO.csproj">
+      <Project>{6b178e01-d598-4d42-ba2a-b215cc87d85e}</Project>
+      <Name>NEsper.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Data.MySQL\NEsper.Data.MySQL.csproj">
+      <Project>{2d559181-5569-43e6-ab09-f5222ff54f62}</Project>
+      <Name>NEsper.Data.MySQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Data.PgSQL\NEsper.Data.PgSQL.csproj">
+      <Project>{ff8ff86d-eea2-462b-8776-f3c7c0a97c5c}</Project>
+      <Name>NEsper.Data.PgSQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Data.SQLite\NEsper.Data.SQLite.csproj">
+      <Project>{f9d5392c-0599-4db4-b5d5-1a208009bd38}</Project>
+      <Name>NEsper.Data.SQLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Log.NLog\NEsper.Log.NLog.csproj">
+      <Project>{59b2d0bf-bc55-4bcb-a6e0-988829498436}</Project>
+      <Name>NEsper.Log.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Regression\NEsper.Regression.csproj">
+      <Project>{5150eeb5-2287-4723-92b0-4cb1232bd2ce}</Project>
+      <Name>NEsper.Regression</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Scripting.ClearScript\NEsper.Scripting.ClearScript.csproj">
+      <Project>{c3e171d1-9c94-4e1c-8763-0648af65be96}</Project>
+      <Name>NEsper.Scripting.ClearScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Scripting.Jurassic\NEsper.Scripting.Jurassic.csproj">
+      <Project>{57230212-9e7d-4923-9c7f-a9ee2226a676}</Project>
+      <Name>NEsper.Scripting.Jurassic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper.Tests\NEsper.Tests.csproj">
+      <Project>{2cce8dfe-1adb-43df-a473-49330a1e2945}</Project>
+      <Name>NEsper.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\NEsper-6.1.1\src\NEsper\NEsper\NEsper.csproj">
+      <Project>{3d317245-cde5-4e0e-9590-d7cba2257d9c}</Project>
+      <Name>NEsper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
