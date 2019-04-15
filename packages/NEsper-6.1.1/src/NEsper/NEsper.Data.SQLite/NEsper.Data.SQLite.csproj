@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net452</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>NEsper.Data.SQLite</AssemblyName>
+    <AssemblyTitle>NEsper.Data.SQLite</AssemblyTitle>
+    <PackageId>NEsper.Data.SQLite</PackageId>
+    <RootNamespace>com.espertech.esper</RootNamespace>
+    <Summary>Data handling for SQLite.</Summary>
+    <Description>Data handling for SQLite.</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NEsper\NEsper.csproj" />
+  </ItemGroup>
+
+</Project>

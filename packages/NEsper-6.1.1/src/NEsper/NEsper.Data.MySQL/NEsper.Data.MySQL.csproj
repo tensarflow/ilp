@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>NEsper.Data.MySQL</AssemblyName>
+    <AssemblyTitle>NEsper.Data.MySQL</AssemblyTitle>
+    <PackageId>NEsper.Data.MySQL</PackageId>
+    <RootNamespace>com.espertech.esper</RootNamespace>
+    <Summary>Data handling for MySQL.</Summary>
+    <Description>Data handling for MySQL.</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NEsper\NEsper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.13" />
+  </ItemGroup>
+</Project>

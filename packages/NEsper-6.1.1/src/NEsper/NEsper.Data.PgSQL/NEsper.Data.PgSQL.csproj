@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>NEsper.Data.PgSQL</AssemblyName>
+    <AssemblyTitle>NEsper.Data.PgSQL</AssemblyTitle>
+    <PackageId>NEsper.Data.PgSQL</PackageId>
+    <RootNamespace>com.espertech.esper</RootNamespace>
+    <Summary>Data handling for postgresql.</Summary>
+    <Description>Data handling for postgresql.</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NEsper\NEsper.csproj" />
+  </ItemGroup>
+</Project>

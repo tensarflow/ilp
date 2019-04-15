@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net452;</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>NEsper.Scripting.Jurassic</AssemblyName>
+    <AssemblyTitle>NEsper.Scripting.Jurassic</AssemblyTitle>
+    <PackageId>NEsper.Scripting.Jurassic</PackageId>
+    <RootNamespace>NEsper.Scripting.Jurassic</RootNamespace>
+    <Summary>NEsper Jurassic Scripting.</Summary>
+    <Description>NEsper Jurassic Scripting.</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jurassic" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NEsper\NEsper.csproj" />
+  </ItemGroup>
+</Project>

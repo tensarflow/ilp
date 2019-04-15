@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net452;</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>NEsper.Scripting.ClearScript</AssemblyName>
+    <AssemblyTitle>NEsper.Scripting.ClearScript</AssemblyTitle>
+    <PackageId>NEsper.Scripting.ClearScript</PackageId>
+    <RootNamespace>NEsper.Scripting.ClearScript</RootNamespace>
+    <Description>NEsper ClearScript Scripting.</Description>
+    <Summary>NEsper ClearScript Scripting.</Summary>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClearScript.V8" Version="5.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NEsper\NEsper.csproj" />
+  </ItemGroup>
+</Project>
