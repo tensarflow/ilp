@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ILP
 {
     class SubsequenceDTW
     {
-        private int m; 
+        private int m;
         private float threshold;
         private List<double> y;
         private List<double> d;

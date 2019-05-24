@@ -1,10 +1,15 @@
-﻿using com.espertech.esper.client;
+﻿#undef UDP_FROM_NODEMCU
+#define LOCAL_SENSOR_SIMULATION
+#undef TCP_FROM_URSIM
+
+using com.espertech.esper.client;
 using com.espertech.esper.client.time;
 using com.espertech.esper.compat.container;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -16,7 +21,6 @@ namespace ILP
         private TrainDataForm trainDataForm;
         private static Chart chartTrainingData;
         private EPServiceProvider _epService;
-        private string LOCAL_IP_ADRESS = "172.17.33.114";
         private double newDataTrain;
         private double newTimeTrain = 0;
         private UDPSocket socketTrainVirtSensor;
@@ -25,7 +29,17 @@ namespace ILP
         private int referencePatternEndIndex = 0;
         public int referencePatternDuration;
         private SubsequenceDTW dtwTraining;
+        private int timeToMonitor = 120000;      // Define time in miliseconds
         public float OptimalThreshold = 0;
+        private int numberClicked = 1;
+        private StripLine patternMark;
+        private Series dataToPlot = new Series();
+        private Series bufferSeries = new Series();
+
+#if LOCAL_SENSOR_SIMULATION || UDP_FROM_NODEMCU
+        private string LOCAL_IP_ADRESS = "127.0.0.1";
+#endif
+
 
         // Global Variables: -------------------END
 
@@ -37,8 +51,13 @@ namespace ILP
 
         private void Setup()
         {
-            // Get chart from training form
+            // Get chart from training form and set all values to zero
             chartTrainingData = trainDataForm.chart1;
+            //for (int i = 0; i < timeToMonitor; i++)
+            //{
+            //    chartTrainingData.Series[0].Points.AddY(0.0);
+            //}
+
 
             // Setup CEP
             var container = ContainerExtensions.CreateDefaultContainer().InitializeDefaultServices().InitializeDatabaseDrivers();
@@ -56,6 +75,21 @@ namespace ILP
             string plotTrainPower_stmt = "select avg(AmpereData) as AvgAmpereData, TimeStamp from TrainCurrent.win:length(15)";
             plotTrainPower = _epService.EPAdministrator.CreateEPL(plotTrainPower_stmt);
             plotTrainPower.Events += PlotEvent_Train;
+        }
+
+        private void BufferEvent_Train(object sender, UpdateEventArgs e)
+        {
+            foreach (var @event in e.NewEvents)
+            {
+                newDataTrain = double.Parse(@event.Get("AvgAmpereData").ToString());
+                newTimeTrain = long.Parse(@event.Get("TimeStamp").ToString());
+            }
+
+            double newX = newDataTrain;
+            double newY = newTimeTrain;
+
+            bufferSeries.Points.AddXY(newX, newY);
+            Console.WriteLine("Added values to bufferseries..");
         }
 
         public void DetectWithClickedThreshold(float xValue)
@@ -110,7 +144,8 @@ namespace ILP
                 newTimeTrain = long.Parse(@event.Get("TimeStamp").ToString());
             }
 
-            //InvokePlotData_Train(newTimeTrain, newDataTrain/* * ROBOT_VOLTAGE*/);
+
+            InvokePlotData_Train(newTimeTrain, newDataTrain/* * ROBOT_VOLTAGE*/);
 
             writeRefDataTraining(newDataTrain);
         }
@@ -137,7 +172,7 @@ namespace ILP
         /// <summary>
         /// Method to validate cross thread operation
         /// </summary>
-        public void InvokePlotData(double newX, double newY, Chart chart)
+        public void InvokePlotDataLearning(double newX, double newY, Chart chart)
         {
             if (chart.InvokeRequired)
             {
@@ -157,28 +192,29 @@ namespace ILP
             }
         }
 
+        //private int i = 0;
+
         /// <summary>
         /// Plot data in chart
         /// </summary>
         private void PlotDataTrain(double newX, double newY, Chart chart)
         {
-            int timeToMonitor = 360000;      // Define time in miliseconds
-
             // Adding new data points
             chart.Series[0].Points.AddXY(newX, newY);
 
             // Keep a constant number of points by removing them from the left
-            while (chart.Series[0].Points[0].XValue < newX - timeToMonitor)
+            while (chart.Series[0].Points.Count > timeToMonitor)
             {
                 chart.Series[0].Points.RemoveAt(0);
             }
 
             // Adjust X axis scale
+            //chart.ChartAreas[0].AxisX.Minimum = chart.Series[0].Points[chart.Series[0].Points.Count - timeToMonitor].XValue;
             chart.ChartAreas[0].AxisX.Minimum = newX - timeToMonitor;
             chart.ChartAreas[0].AxisX.Maximum = newX;
 
-            // Redraw chart 
-            //chart.Invalidate(); // implemented as button action
+            // Redraw chart
+            chart.Invalidate();
         }
 
         private void writeRefDataTraining(double data)
@@ -191,9 +227,6 @@ namespace ILP
         {
             chartTrainingData.Series[0].Points.Clear();
         }
-
-        private int numberClicked = 1;
-        private StripLine patternMark;
 
         public void SetClickedXValue(int xValue)
         {
@@ -274,16 +307,18 @@ namespace ILP
 
             bool foundOptimalThreshold = false;
 
-            for (float i = 0; i < 10; i += .25F)
+            for (float epsilon = 0; epsilon < 100; epsilon += .25F)
             {
-                int numberOfDetectedPatterns = DetectEvent(i);
+                // Detect events in one stream with threshold i
+                int numberOfDetectedPatterns = DetectEvent(epsilon);
+                Console.WriteLine("numberOfDetectedPatterns: " + numberOfDetectedPatterns);
 
-                InvokePlotData(i, numberOfDetectedPatterns, trainDataForm.chart3);
-
+                // Visualize detected events with thresholds
+                InvokePlotDataLearning(epsilon, numberOfDetectedPatterns, trainDataForm.chart3);
                 if (numberOfDetectedPatterns == numberOfExpectedPatterns && !foundOptimalThreshold)
                 {
-                    OptimalThreshold = i;
-                    trainDataForm.label4.Text = "Optimal Threshold: " + i;
+                    OptimalThreshold = epsilon;
+                    trainDataForm.label4.Text = "Optimal Threshold: " + epsilon;
                     foundOptimalThreshold = true;
                     MarkThreshold(OptimalThreshold);
                 }
@@ -327,10 +362,10 @@ namespace ILP
         {
             // Generate subsequnece to detect
             List<double> referencePatternTrainingCpy = new List<double>(referencePatternTraining);
-            dtwTraining = new SubsequenceDTW(referencePatternTrainingCpy, epsilon, (referencePatternDuration) / 2);
+            dtwTraining = new SubsequenceDTW(referencePatternTrainingCpy, epsilon, (int)referencePatternDuration - 100);
 
             // Number of detected patterns
-            int numberOfDetectedPatterns = 0;
+            int numberOfDetectedPatternsInOneStream = 0;
 
             // Clear all marker from chart
             chartTrainingData.ChartAreas[0].AxisX.StripLines.Clear();
@@ -346,11 +381,11 @@ namespace ILP
                 if ((sequence.Status == SubsequenceStatus.Optimal) /*|| (sequence.Status == SubsequenceStatus.NotOptimal)*/)
                 {
                     SetMarker(sequence, chartTrainingData);
-                    numberOfDetectedPatterns++;
+                    numberOfDetectedPatternsInOneStream++;
                 }
             }
 
-            return numberOfDetectedPatterns;
+            return numberOfDetectedPatternsInOneStream;
         }
 
         private void SetMarker(Subsequence sequence, Chart chart)

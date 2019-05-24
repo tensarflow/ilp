@@ -31,7 +31,6 @@ namespace ILP
         // Global variables
         Robot robot = new Robot();
         CurrentMonitor currentMonitor;
-        string FORM_TYPE = "GUIForm";
 
         /// <summary>
         /// ToDo

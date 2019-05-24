@@ -1,5 +1,6 @@
 ﻿//#define TCP_FROM_ROBOT
-#define UDP_FROM_NODEMCU
+#undef UDP_FROM_NODEMCU
+#define LOCAL_SENSOR_SIMULATION
 #undef TCP_FROM_URSIM
 
 using com.espertech.esper.client;
@@ -34,7 +35,12 @@ namespace ILP
         private string EVENTTYPE_ROBOTCURRENT = "ROBOTCURRENT";
         private string EVENTTYPE_PRINTERCURRENT = "PINTERCURRENT";
 
+
+#if LOCAL_SENSOR_SIMULATION
+        private string LOCAL_IP_ADRESS = "127.0.0.1";
+#elif UDP_FROM_NODEMCU
         private string LOCAL_IP_ADRESS = "172.17.33.114";
+#endif
 
         private List<double> referencePatternRobot;
         private List<double> referencePatternPrinter;
@@ -49,6 +55,7 @@ namespace ILP
         private int textBoxPosY = 0;
         private UDPSocket socketRobotSensor;
         private UDPSocket socketPrinterSensor;
+        private int timeToMonitor = 120000;      // Define time in miliseconds
 
         public int durationLearned;
         public float thresholdLearned;
@@ -72,9 +79,14 @@ namespace ILP
         /// </summary>
         private void Setup()
         {
-            // get chart of mainForm
+            // get chart of mainForm and set all values to zero
             chartRobot = mainForm.chart2;
             chartPrinter = mainForm.chart1;
+            //for (int i = 0; i < timeToMonitor; i++)
+            //{
+            //    chartRobot.Series[0].Points.AddY(0);
+            //    chartPrinter.Series[0].Points.AddY(0);
+            //}
 
             // Setup CEP
             var container = ContainerExtensions.CreateDefaultContainer()
@@ -117,7 +129,7 @@ namespace ILP
 
             // Create EPL statement to write detected sample movement of ROBOT
             EPStatement writeDetectedSampleMovementEvent;
-            string writeDetectedSampleMovementEvent_stmt = "select StartTime, EndTime, Duration, UsedEnergy, Cost, EventSource from DetectedEvent";
+            string writeDetectedSampleMovementEvent_stmt = "select Distance, StartTime, EndTime, Duration, UsedEnergy, Cost, EventSource from DetectedEvent";
             writeDetectedSampleMovementEvent = _epService.EPAdministrator.CreateEPL(writeDetectedSampleMovementEvent_stmt);
             writeDetectedSampleMovementEvent.Events += OnDetectedPattern;
 
@@ -151,7 +163,7 @@ namespace ILP
             getDataAndSendToEngineThread.Start();
 #endif
 
-#if UDP_FROM_NODEMCU
+#if UDP_FROM_NODEMCU || LOCAL_SENSOR_SIMULATION
             socketRobotSensor = new UDPSocket(_epService);
             socketRobotSensor.Server_Robot(LOCAL_IP_ADRESS, 80);
 
@@ -501,7 +513,7 @@ namespace ILP
         private void InitDetectEventForRobot()
         {
             referencePatternRobot = getRefDataRobot();
-            dtwRobot = new SubsequenceDTW(referencePatternLearned, thresholdLearned, durationLearned/2);
+            dtwRobot = new SubsequenceDTW(referencePatternLearned, thresholdLearned, (int)durationLearned - 10);
             newDataRobot = 0;
         }
 
@@ -550,7 +562,7 @@ namespace ILP
 
                 double cost = usedEnery_kWh * .4612;
 
-                _epService.EPRuntime.SendEvent(new DetectedEvent(sequence.TStart, sequence.TEnd, usedEnery_kWh, cost, EVENTTYPE_ROBOTCURRENT));
+                _epService.EPRuntime.SendEvent(new DetectedEvent(sequence.Distance, sequence.TStart, sequence.TEnd, usedEnery_kWh, cost, EVENTTYPE_ROBOTCURRENT));
             }
         }
 
@@ -577,7 +589,7 @@ namespace ILP
 
             Subsequence sequence = dtwPrinter.compareDataStream(newDataPrinter, (int)newTimePrinter);        // Attention!! Converting long to int
 
-            if ((sequence.Status == SubsequenceStatus.Optimal) || (sequence.Status == SubsequenceStatus.NotOptimal))
+            if ((sequence.Status == SubsequenceStatus.Optimal) /*|| (sequence.Status == SubsequenceStatus.NotOptimal)*/)
             {
                 SetMarker(sequence, chartPrinter);
 
@@ -587,7 +599,7 @@ namespace ILP
 
                 double cost = usedEnery_kWh * .4612;
 
-                _epService.EPRuntime.SendEvent(new DetectedEvent(sequence.TStart, sequence.TEnd, usedEnery_kWh, cost, EVENTTYPE_PRINTERCURRENT));
+                _epService.EPRuntime.SendEvent(new DetectedEvent(sequence.Distance, sequence.TStart, sequence.TEnd, usedEnery_kWh, cost, EVENTTYPE_PRINTERCURRENT));
             }
         }
 
@@ -639,6 +651,8 @@ namespace ILP
             }
         }
 
+
+
         /// <summary>
         /// Method to validate cross thread operation
         /// </summary>
@@ -682,8 +696,6 @@ namespace ILP
         /// </summary>
         private void PlotDataRobot(double newX, double newY, Chart chart)
         {
-            int timeToMonitor = 120000;      // Define time in miliseconds
-
             // Adding new data points
             chart.Series[0].Points.AddXY(newX, newY);
 
@@ -737,6 +749,7 @@ namespace ILP
             string usedEnergy = "XX";
             string cost = "XX";
             string eventType = "XX";
+            string distance = "XX";
             foreach (var @event in e.NewEvents)
             {
                 startTime = @event.Get("StartTime").ToString();
@@ -745,21 +758,41 @@ namespace ILP
                 usedEnergy = @event.Get("UsedEnergy").ToString();
                 cost = @event.Get("Cost").ToString();
                 eventType = @event.Get("EventSource").ToString();
+                distance = @event.Get("Distance").ToString();
             }
-            try
+
+            createSampleMovementDetectedTextBox(distance, startTime, endTime, duration, usedEnergy, cost, eventType);
+            PlotDistance(distance);
+            DataPoint maxDataPoint = mainForm.chart3.Series[0].Points.FindMaxByValue();
+            DataPoint minDataPoint = mainForm.chart3.Series[0].Points.FindMinByValue();
+
+            mainForm.chart3.ChartAreas[0].AxisY.Maximum = (int)maxDataPoint.YValues[0] + 10;
+            mainForm.chart3.ChartAreas[0].AxisY.Minimum = (int)minDataPoint.YValues[0] - 10;
+            // Redraw chart
+            mainForm.chart3.Invalidate();
+
+        }
+
+        private void PlotDistance(string distance)
+        {
+            if (mainForm.chart3.InvokeRequired)
             {
-                createSampleMovementDetectedTextBox(startTime, endTime, duration, usedEnergy, cost, eventType);
+                mainForm.Invoke(new MethodInvoker(delegate
+                {
+                    mainForm.chart3.Series[0].Points.AddY(double.Parse(distance));
+                }));
             }
-            catch (Exception err)
+
+            else
             {
-                Console.WriteLine("Exceptionnn: " + err.Message);
+                mainForm.chart3.Series[0].Points.AddY(double.Parse(distance));
             }
         }
 
         /// <summary>
         /// ToDo!!
         /// </summary>
-        private void createSampleMovementDetectedTextBox(string startTime, string endTime, string duration, string usedEnergy, string cost, string eventType)
+        private void createSampleMovementDetectedTextBox(string distance, string startTime, string endTime, string duration, string usedEnergy, string cost, string eventType)
         {
             TextBox textBoxTest = new TextBox();
             textBoxTest.Location = new Point(0, textBoxPosY);
@@ -771,6 +804,7 @@ namespace ILP
             textBoxTest.TabIndex = 4;
             textBoxTest.Text = "New Event Detected: " +
                 "\r\nEvent Type: " + eventType +
+                "\r\nPattern Distance: " + distance +
                 "\r\nStarted: " + startTime +
                 "\r\nEndend: " + endTime +
                 "\r\nDuration:" + duration + " ms" +

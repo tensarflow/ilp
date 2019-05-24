@@ -14,12 +14,14 @@ namespace ILP
         private double _usedEnergy;
         private double _cost;
         private string _eventSource;
+        private double _distance;
 
         /// <summary>
         /// ToDo!!
         /// </summary>
-        public DetectedEvent(int aStartTime, int aEndTime, double aUsedEnergy, double aCost, string aEventSource)
+        public DetectedEvent(double aDistance, int aStartTime, int aEndTime, double aUsedEnergy, double aCost, string aEventSource)
         {
+            _distance = aDistance;
             _startTime = aStartTime;
             _endTime = aEndTime;
             _duration = aEndTime - aStartTime;
@@ -80,6 +82,15 @@ namespace ILP
         {
             get => _eventSource;
             set => _eventSource = value;
+        }
+
+        /// <summary>
+        /// ToDo!!
+        /// </summary>
+        public double Distance
+        {
+            get => _distance;
+            set => _distance = value;
         }
     }
 }

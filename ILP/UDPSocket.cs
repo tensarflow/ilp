@@ -1,12 +1,9 @@
-﻿using System;
+﻿using com.espertech.esper.client;
+using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-
-using com.espertech.esper.client;
-using com.espertech.esper.compat.container;
-using com.espertech.esper.client.scopetest;
-using com.espertech.esper.client.time;
 
 namespace ILP
 {
@@ -98,7 +95,7 @@ namespace ILP
             {
                 State so = (State)ar.AsyncState;
                 int bytes = _socket.EndSend(ar);
-                Console.WriteLine("SEND: {0}, {1}", bytes, text);
+                //Console.WriteLine("SEND: {0}, {1}", bytes, text);
             }, state);
         }
 
@@ -114,7 +111,7 @@ namespace ILP
                     State so = (State)ar.AsyncState;
                     int bytes = _socket.EndReceiveFrom(ar, ref epFrom);
                     _socket.BeginReceiveFrom(so.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv, so);
-                    Console.WriteLine("RECV: {0}: {1}, {2}", epFrom.ToString(), bytes, Encoding.ASCII.GetString(so.buffer, 0, bytes));
+                    //Console.WriteLine("RECV: {0}: {1}, {2}", epFrom.ToString(), bytes, Encoding.ASCII.GetString(so.buffer, 0, bytes));
                 }
                 catch (System.ObjectDisposedException)
                 {
@@ -161,6 +158,8 @@ namespace ILP
                     int bytes = _socket.EndReceiveFrom(ar, ref epFrom);
                     _socket.BeginReceiveFrom(so.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv, so);
                     //Console.WriteLine("RECV Virtual Sensor: {0}: {1}, {2}", epFrom.ToString(), bytes, Encoding.ASCII.GetString(so.buffer, 0, bytes));
+                    //Console.WriteLine("RECV Converted: " + double.Parse(Encoding.ASCII.GetString(so.buffer, 0, bytes), NumberStyles.Float, CultureInfo.InvariantCulture));
+                    
                     _epService.EPRuntime.SendEvent(new TrainCurrentEvent(float.Parse(Encoding.ASCII.GetString(so.buffer, 0, bytes))));
                 }
                 catch (System.ObjectDisposedException)

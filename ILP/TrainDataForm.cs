@@ -64,7 +64,15 @@ namespace ILP
 
         private void button7_Click(object sender, EventArgs e)
         {
-            trainMonitor.CommitReferencePattern();
+
+            try
+            {
+                trainMonitor.CommitReferencePattern();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Caution: Be sure to commit pattern first! \nException thrown: " + exception);
+            }
         }
 
         private void button8_Click(object sender, EventArgs e)
