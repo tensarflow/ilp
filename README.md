@@ -5,7 +5,7 @@ The aim of this work is to determine how errors in additive manufacturing can be
 # Installtion Instruction ILP
 
 1. Clone the repository
-2. Open the `.sln` file with Visual Studio 2017
+2. Open the `.sln` file with Visual Studio 2017 or 2019
 3. Set `ILP` as Startup project
 4. Build and run the solution
 
