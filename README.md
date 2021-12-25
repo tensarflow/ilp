@@ -13,3 +13,7 @@ The aim of this work is to determine how errors in additive manufacturing can be
 
 1. Click `Start System` to start the CEP engine.
 2. Click `Train Data` to train a new Pattern.
+
+To see in action:
+
+https://www.youtube.com/watch?v=qm_Ob-d7OGk&t=109s
